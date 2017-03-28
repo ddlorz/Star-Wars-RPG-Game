@@ -59,6 +59,7 @@
 	}
 	.textHeroes{
 		color: #ffcc00;
+		min-width: 100px;
 	}
 	.textDark {
 		color: #cc0000;
@@ -89,11 +90,11 @@
 		opacity: .2;
 	}
 	.statsTextHeroes {
-		font-size: 12pt;
+		font-size: 10pt;
 		text-align: right;
 	}
 	.statsTextDark {
-		font-size: 12pt;
+		font-size: 10pt;
 		text-align: left;
 	}
 	.floatRight {
@@ -101,6 +102,10 @@
 	}
 	.floatLeft {
 		float: left;
+	}
+	.textStats {
+		font-size: 10pt;
+		margin: 0 5px 0 5px;
 	}
 	#msgBox {
 		width: 100%;
@@ -155,7 +160,7 @@
 					Sith Acolyte Ren
 					<div class="divIcon textNeutral">
 						<br><img src="assets\images\kyloren.jpg" alt="kylo ren" class="icons iconsDark" id=kyloren><br>
-						130 HP
+						200 HP
 					</div>
 				</div>
 			</div>
@@ -164,7 +169,7 @@
 					Sith Lord Vader
 					<div class="divIcon textNeutral">
 				 		<br><img src="assets\images\vader.jpg" alt="darth vader" class="icons iconsDark" id="darthvader"><br>
-				 		150 HP
+				 		250 HP
 				 	</div>
 				</div>
 			</div>
@@ -175,8 +180,7 @@
 		<div class="row text-center">
 			<div class="col-md-5">											
 				<div class="divIcon textNeutral floatRight">
-					<br><img src="" alt="Hero" class="iconsArena iconsHeroes invisible" id="arenaHero"><br>
-					Hero
+					<br><img src="" alt="Hero" class="iconsArena iconsHeroes invisible" id="arenaHero"><br>					
 				</div>
 				<div class="statsTextHeroes textHeroes floatRight" style="margin-right: 15px;"></div>					
 			</div>	
@@ -189,8 +193,7 @@
 			</div>
 			<div class="col-md-5">
 				<div class="divIcon textNeutral floatLeft">
-					<br><img src="" alt="Dark Side" class="iconsArena iconsDark invisible" id="arenaDark"><br>		
-					Dark			
+					<br><img src="" alt="Dark Side" class="iconsArena iconsDark invisible" id="arenaDark"><br>									
 				</div>
 				<div class="statsTextDark textDark floatLeft" style="margin-left: 15px;"></div>				
 			</div>	
@@ -199,14 +202,29 @@
 
 	<div class="container">
 		<div class="row text-center">
-			<div class="col-md-5 textHeroes">	
-		 		<div class="floatRight" id="heroHP">Hero HP</div><br>
-		 		<div class="floatRight" id="heroAP">Attack Power</div>
-			</div>
+		<div class="col-md-2 col-md-offset-3 textHeroes invisible" id="heroRTstats">				
+			<div class="floatLeft textStats">Hero HP:</div>
+			<div class="floatLeft" id="heroHP">00</div>	<br>		 		 		
+	 		<div class="floatLeft textStats">Attack Power:</div>
+	 		<div class="floatLeft" id="heroAP">00</div>
+	 	</div>
 		<div class="col-md-2 headerDark"></div>
-		<div class="col-md-5 textDark">	
-		 	<div class="floatLeft" id="darkHP">Darkside HP</div><br>
-		 	<div class="floatLeft" id="darkCAP">Counter Attack Power</div>
+		<div class="col-md-5 textDark invisible" id="darkRTStats">			
+		 	<div class="floatLeft textStats">DarkSide HP:</div>
+		 	<div class="floatLeft" id="darkHP" >00</div><br>
+		 	<div class="floatLeft textStats">Counter Attack Power:</div>
+		 	<div class="floatLeft" id="darkCAP">00</div>
+		</div>
+	</div>
+
+	<div class="container" style="margin-top: 20px;">
+		<div class="row text-center">
+			<div class="col-md-12 col-md-offset-0" id="specialBox">
+				Defeat the Dark Side with your crossbows and spears!<br>
+				Using <strong>attack button</strong> damages the enemy with your current attack power(AP) and increments the AP<br>
+				The enemy may cast a strong spell along with his current counter attack power(CAP) at it's turn<br>
+				You can use special skills but it will consume one turn
+			</div>
 		</div>
 	</div>
 
@@ -224,44 +242,71 @@ $(document).ready(function(){
 		dark: "",
 		darkHP: 0,
 		darkCAP: 0,
+		darkSS: 0,
+		level: 6,
 		fight: false,
 		nextMatch: false,	
 		heroWin: false,
 		darkWin: false,	
 		endGame: false,
 
-		wookie: [100, 4, "Wookie", true],
+		wookie: [100, 4, "Wookie", true, ""],
 		ewok: [120, 8, "Ewok", true],
-		kyloren: [130, 6, "Kylo Ren", true],
-		vader: [150, 20, "Darth Vader", true],
+		kyloren: [200, 6, "Kylo Ren", true],
+		vader: [250, 15, "Darth Vader", true],
 
-		heroDisplay: function() {
-			$("#arenaHero").removeClass("invisible");
-			if(starWars.hero === starWars.wookie) {
+		kylorenSkills: ["Force Drain", "Force Choke", "Thought Bomb"],
+		vaderSkills: ["Force Lightning", "Force Destruction", "Force Rage"],
+
+		heroDisplay: function() {			
+			if(starWars.hero === starWars.wookie) {				
 				$("#arenaHero").attr("src", "assets/images/wookie.jpg");
-				$(".statsTextHeroes").html("Wookie:<br> 100 HP<br>Attack Power: 4<br> Power Increment: 4");
+				$(".statsTextHeroes").html("Wookie:<br> 100 HP<br>Attack Power: 4<br> Power Increment: 4");				
+				starWars.heroDisplaymicro();
 				$("#wookie").addClass("faded");
 			}
 			else if(starWars.hero === starWars.ewok) {
-				$("#arenaHero").attr("src", "assets/images/ewok.jpg");
+				$("#arenaHero").attr("src", "assets/images/ewok.jpg");				
 				$(".statsTextHeroes").html("Ewok:<br> 120 HP<br>Attack Power: 8<br> Power Increment: 8");
+				starWars.heroDisplaymicro();
 				$("#ewok").addClass("faded");
 			}
 		},
 
-		darkDisplay: function() {
-			$("#arenaDark").removeClass("invisible");
-			if(starWars.dark === starWars.kyloren) {
+		heroDisplaymicro: function() {
+			$("#arenaHero, .statsTextHeroes").removeClass("invisible");
+			$("#arenaHero, .statsTextHeroes").hide();
+			$("#arenaHero, .statsTextHeroes").delay(400).fadeIn("slow");	
+		},
+
+		darkDisplay: function() {			
+			if(starWars.dark === starWars.kyloren) {								
 				$("#arenaDark").attr("src", "assets/images/kyloren.jpg");
-				$(".statsTextDark").html("Kylo:<br> 130 HP<br> Counter Attack Power: 6");
+				$(".statsTextDark").html("Kylo:<br> 200 HP<br> Counter Attack Power: 6");
+				$(".statsTextDark").append("<br><br>Skills: <br>");
+				$(".statsTextDark").append("Force Drain: Current Hero HP / 10<br>");
+				$(".statsTextDark").append("Force Choke: CAP * 3<br>"); 
+				$(".statsTextDark").append("Thought Bomb: Initial Hero AP * 2");
+				starWars.darkDisplaymicro();									
 				$("#kyloren").addClass("faded");
 			}
 
 			else if(starWars.dark === starWars.vader) {
 				$("#arenaDark").attr("src", "assets/images/vader.jpg");
-				$(".statsTextDark").html("Vader:<br> 150 HP <br> Counter Attack Power: 20");
+				$(".statsTextDark").html("Vader:<br> 250 HP <br> Counter Attack Power: 15");
+				$(".statsTextDark").append("<br><br>Skills: <br>");
+				$(".statsTextDark").append("Force Lightning: Current CAP * 2<br>");
+				$(".statsTextDark").append("Force Destruction: Current Hero HP / 2<br>"); 
+				$(".statsTextDark").append("Force Rage: Increment CAP by 5");
+				starWars.darkDisplaymicro();
 				$("#darthvader").addClass("faded");
 			}
+		},
+
+		darkDisplaymicro: function() {
+			$("#arenaDark, .statsTextDark").removeClass("invisible");
+			$("#arenaDark, .statsTextDark").hide();						
+			$("#arenaDark, .statsTextDark").delay(400).fadeIn("slow");		
 		},
 
 		fightStart: function() {
@@ -272,10 +317,12 @@ $(document).ready(function(){
 				$("#heroAP").html(starWars.hero[1]);
 				heroHP = starWars.hero[0];
 				heroAP = starWars.hero[1];
-				$("#darkHP").html(starWars.dark[0])
+				$("#darkHP").html(starWars.dark[0]);
 				$("#darkCAP").html(starWars.dark[1]);
 				darkHP = starWars.dark[0];
 				darkCAP = starWars.dark[1];
+				$("#heroRTstats, #darkRTStats").removeClass("invisible");
+				$("specialBox").empty();
 				starWars.fight = true;
 			}			
 		},
@@ -285,25 +332,30 @@ $(document).ready(function(){
 				darkHP -= heroAP;
 				heroHP -= darkCAP;
 				heroAP += starWars.hero[1];
+				$("#specialBox").html(starWars.hero[2] + " inflicts " + heroAP + " damage<br>");
+				$("#specialBox").append(starWars.dark[2] + " inflicts " + darkCAP + " damage<br>");
+
+				starWars.darkSpecialSkill();
+				heroHP -= starWars.darkSS;
 
 				if (heroHP <= 0) {
 					$("#msgBox").html(starWars.dark[2] + " has overwhelmed you");
-					$("#heroHP").html(0);
+					heroHP = 0;
 					if (starWars.hero[2] === 'Wookie') {
 						starWars.wookie[3] = false;
 					}
 					if (starWars.hero[2] === 'Ewok') {
 						starWars.ewok[3] = false;
 					}	
-					starWars.dark[0] = darkHP;				
+					starWars.dark[0] = darkHP;
 					starWars.nextMatch = true;
-					starWars.fight = false;
 					starWars.darkWin = true;
-					return;
+					starWars.endGameFunc();
+					$("#theButton").html("Continue");
 				}
 				if (darkHP <= 0) {			
 					$("#msgBox").html("The Dark side is no match to the " + starWars.hero[2]);
-					$("#darkHP").html(0);		
+					darkHP = 0;
 					if (starWars.dark[2] === 'Kylo Ren') {
 						starWars.kyloren[3] = false;
 					}		
@@ -312,43 +364,98 @@ $(document).ready(function(){
 					}		
 					starWars.hero[0] = heroHP;
 					starWars.nextMatch = true;
-					starWars.fight = false;
-					starWars.heroWin = true;
-					return;
+					starWars.heroWin = true;	
+					starWars.endGameFunc();				
+					$("#theButton").html("Continue");					
 				}
 				$("#heroHP").html(heroHP);
 				$("#darkHP").html(darkHP);
 				$("#heroAP").html(heroAP);
 				$("#darkCAP").html(darkCAP);
+				
 			}
-		},		
+		},	
+
+		darkSpecialSkill: function() {
+			var randomNumber = Math.floor(Math.random() * starWars.level);
+			console.log(randomNumber);
+			if (starWars.dark[2] === "Kylo Ren") {
+				switch (randomNumber) {
+					case 0:
+						starWars.darkSS = Math.floor(heroHP / 10);
+						break;
+					case 1:
+						starWars.darkSS = starWars.dark[1] * 3;
+						break;
+					case 2:
+						starWars.darkSS = 2 * starWars.hero[1];
+						break;
+					case 3: 
+					case 4:
+					case 5:
+						starWars.darkSS = 0;
+						break;
+				}
+
+				if (starWars.darkSS !== 0) {
+					$("#specialBox").append("Kylo Ren inflicts " + starWars.kylorenSkills[randomNumber] + " for an additional " + starWars.darkSS + " damage");
+				}
+			}
+			if (starWars.dark[2] === "Darth Vader") {
+				switch (randomNumber) {
+					case 0:
+						starWars.darkSS = darkCAP * 2;
+						break;
+					case 1:
+						starWars.darkSS = Math.floor(heroHP / 2);
+						break;
+					case 2:						
+						starWars.darkSS = 0;
+						darkCAP += 5;
+						$("#specialBox").append("Darth Vader uses "+ starWars.vaderSkills[randomNumber] + " increasing his CAP by five");
+						break;
+					case 3: 
+					case 4:
+					case 5:
+						starWars.darkSS = 0;
+						break;
+				}
+
+				if (starWars.darkSS !== 0) {
+					$("#specialBox").append("Darth Vader inflicts "+ starWars.vaderSkills[randomNumber] + " for an additional " + starWars.darkSS + " damage");
+				}
+			}
+		},
 
 		nextRoundHeroWin: function() {
 			starWars.darkDisplay();
 			darkHP = starWars.dark[0];
+			darkCAP = starWars.dark[1];
 			$("#darkHP").html(darkHP);
-			$("#theButton").html("Continue");
+			$("#darkCAP").html(darkCAP);
+			$("#theButton").html("Attack");
 		},
 
 		nextRoundDarkWin: function() {
 			starWars.heroDisplay();
 			heroHP = starWars.hero[0];
+			heroAP = starWars.hero[1];
 			$("#heroHP").html(heroHP);
-			$("#theButton").html("Continue");
+			$("#heroAP").html(heroAP);
+			$("#theButton").html("Attack");
 		},
 
 		wipeOut: function() {
-			$("#arenaHero").addClass("invisible");
-			$("#arenaDark").addClass("invisible");
-			$(".statsTextHeroes").html("");
-			$(".statsTextDark").html("");
-			$("#heroHP").html("Hero HP");
-			$("#darkHP").html("Dark Side HP");
-			$("#heroAP").html("Attack Power");
-			$("#darkCAP").html("Counter Attack Power");
+			$("#arenaHero, #arenaDark, #heroRTstats, #darkRTStats").addClass("invisible");
+			$(".statsTextHeroes, .statsTextDark").empty();
+			$("#specialBox").html("Defeat the Dark Side with your crossbows and spears!<br>");
+			$("#specialBox").append("Using <strong>attack button</strong> damages the enemy with your current attack power(AP) and increments the AP<br>");
+			$("#specialBox").append("The enemy may cast a strong spell along with his current counter attack power(CAP) at it's turn<br>");
+			$("#specialBox").append("You can use special skills but it will consume one turn");
+			$("#heroHP, #darkHP, #heroAP, #darkCAP").html(00);
 			$("#theButton").html("Fight");
 			$("#theButton").removeClass("faded");
-			$("#msgBox").html("Click fight to start");
+			$("#msgBox").html("Click fight to start");			
 
 			starWars.hero = "";
 			starWars.dark = "";
@@ -370,10 +477,24 @@ $(document).ready(function(){
 		},
 
 		goodGame: function() {
-			$("#theButton").html("GG");
 			$("#theButton").addClass("faded");
 			starWars.endGame = true;
-		}
+		},
+
+		endGameFunc: function() {
+			if (starWars.kyloren[3] === false && starWars.vader[3] === false) {
+				$("#msgBox").html("You have destroyed the Dark Side!");
+				$("#darkHP").html("0");
+				starWars.goodGame();
+				return;				
+			}	
+			else if (starWars.wookie[3] === false && starWars.ewok[3] === false) {
+				$("#msgBox").html("You lost to the Dark Side");
+				$("#heroHP").html("0");
+				starWars.goodGame();
+				return;
+			}	
+		},
 	}
 
 	$("#wookie").click(function() {		
@@ -416,52 +537,46 @@ $(document).ready(function(){
 		}
 	});	
 
-	$("#theButton").click(function() {
+	$("#theButton").click(function() {		
 		if (starWars.endGame === false) {
 			if (starWars.heroWin === false && starWars.darkWin === false ) {
 				if (starWars.fight !== true) {
+					$("#specialBox").empty();
 					starWars.fightStart();
 				}
 				else {
 					starWars.attack();
+					return;
 				}
 			}
-
-			if (starWars.heroWin === true && starWars.darkWin === false) {
+			else if (starWars.heroWin === true && starWars.darkWin === false) {
 				if (starWars.kyloren[3] === false) {
 					starWars.dark = starWars.vader;
 					starWars.nextRoundHeroWin();
-					starWars.heroWin = false;					
+					$("#specialBox").empty();
+					starWars.heroWin = false;	
 				}
 				else if (starWars.vader[3] === false) {
 					starWars.dark = starWars.kyloren;
 					starWars.nextRoundHeroWin();
+					$("#specialBox").empty();
 					starWars.heroWin = false;
-				}
+				}				
 			}
-			if (starWars.heroWin === false && starWars.darkWin === true) {
+			else if (starWars.heroWin === false && starWars.darkWin === true) {
 				if (starWars.wookie[3] === false) {
 					starWars.hero = starWars.ewok;
 					starWars.nextRoundDarkWin();
-					starWars.darkWin = false;					
+					$("#specialBox").empty();
+					starWars.darkWin = false;			
 				}
 				else if (starWars.ewok[3] === false) {
 					starWars.hero = starWars.wookie;
 					starWars.nextRoundDarkWin();
+					$("#specialBox").empty();
 					starWars.darkWin = false;
 				}
-			}
-			if (starWars.kyloren[3] === false && starWars.vader[3] === false) {
-				$("#msgBox").html("You have destroyed the Dark Side!");
-				$("#darkHP").html("0");
-				starWars.goodGame();
-				
-			}
-			if (starWars.wookie[3] === false && starWars.ewok[3] === false) {
-				$("#msgBox").html("You lost to the Dark Side");
-				$("#heroHP").html("0");
-				starWars.goodGame();
-			}
+			}				
 		}		
 	});	
 
