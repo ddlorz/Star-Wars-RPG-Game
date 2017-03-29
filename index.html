@@ -458,14 +458,10 @@ $(document).ready(function(){
 
 		skillsCounterFunc: function() {
 			if ((starWars.skillsCounter % 2) === 0) {
-				$("#skill1").removeClass("faded");
-				$("#skill2").removeClass("faded");
-				$("#skill3").removeClass("faded");
+				$("#skill1, #skill2, #skill3").removeClass("faded");
 			}
 			else if ((starWars.skillsCounter % 2) === 1) {
-				$("#skill1").addClass("faded");
-				$("#skill2").addClass("faded");
-				$("#skill3").addClass("faded");
+				$("#skill1, #skill2, #skill3").addClass("faded");
 			}
 		},
 
@@ -545,7 +541,8 @@ $(document).ready(function(){
 			darkCAP = starWars.dark[1];
 			$("#darkHP").html(darkHP);
 			$("#darkCAP").html(darkCAP);
-			$("#theButton").html("Attack");
+			$("#theButton").html("Continue");
+			$("#skill1, #skill2, #skill3").addClass("faded");
 		},
 
 		nextRoundDarkWin: function() {
@@ -554,7 +551,8 @@ $(document).ready(function(){
 			heroAP = starWars.hero[1];
 			$("#heroHP").html(heroHP);
 			$("#heroAP").html(heroAP);
-			$("#theButton").html("Attack");
+			$("#theButton").html("Continue");
+			$("#skill1, #skill2, #skill3").addClass("faded");
 		},
 
 		wipeOut: function() {
