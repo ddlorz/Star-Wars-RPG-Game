@@ -111,7 +111,7 @@
 	#msgBox {
 		width: 100%;
 		height: 100px;
-		font-size: 16pt;
+		font-size: 10pt;
 	}
 	@media screen and (max-width: 1200px) {	 
 		.textHeroes, .textDark {
@@ -186,8 +186,8 @@
 				<div class="statsTextHeroes textHeroes floatRight" style="margin-right: 15px;"></div>					
 			</div>	
 			<div class="col-md-2">
-				<div id="fightButton">
-					<div id="msgBox">Click fight to start</div>
+				<div id="fightButton">	
+					<div id="msgBox">Read guide below.<br>Select a Hero and a Sith then click Fight to start.</div>
 					<button class="btn btn-default skillsButton" id="theButton">Fight</button>
 					<button class="btn btn-default skillsButton faded" id="skill1">Skill 1</button><br>
 					<button class="btn btn-default skillsButton faded" id="skill2">Skill 2</button>
@@ -260,7 +260,7 @@ $(document).ready(function(){
 		endGame: false,
 
 		wookie: [100, 4, "Wookie", true, "Thick Skin", false, "Empower", false, "Bombardment", false],
-		ewok: [120, 5, "Ewok", true, "Poison", false, "Sneak Attack", false, "Rally Tribe", false],
+		ewok: [120, 4, "Ewok", true, "Poison", false, "Sneak Attack", false, "Rally Tribe", false],
 		kyloren: [200, 6, "Kylo Ren", true],
 		vader: [250, 15, "Darth Vader", true],
 
@@ -280,11 +280,11 @@ $(document).ready(function(){
 			}
 			else if(starWars.hero === starWars.ewok) {
 				$("#arenaHero").attr("src", "assets/images/ewok.jpg");				
-				$(".statsTextHeroes").html("Ewok:<br> 120 HP<br>Attack Power: 5<br> Power Increment: 8");
+				$(".statsTextHeroes").html("Ewok:<br> 120 HP<br>Attack Power: 4<br> Power Increment: 4");
 				$(".statsTextHeroes").append("<br><br>Skills: <br>");
-				$(".statsTextHeroes").append("1: Poison: Prevent enemy skill for 2 turns<br>");
+				$(".statsTextHeroes").append("1: Poison: Prevent enemy skill for 1 turn<br>");
 				$(".statsTextHeroes").append("2: Sneak Attack: Deal 1.3 times AP <br>");
-				$(".statsTextHeroes").append("3: Rally Tribe: Deal and block 1-20 damage<br>");
+				$(".statsTextHeroes").append("3: Rally Tribe: Deal and block 3-12 damage<br>");
 				starWars.heroDisplaymicro();
 				$("#ewok").addClass("faded");
 			}
@@ -328,7 +328,8 @@ $(document).ready(function(){
 
 		fightStart: function() {
 			if (starWars.hero !== "" && starWars.dark !== "") {
-				$("#msgBox").html("Who will win!?!?!")
+				$("#msgBox").html("Use your skills wisely to defeat a Sith.<br>")
+				$("#msgBox").append("Skill descriptions are on the left.<br>")
 				$("#theButton").html("Attack");
 				$("#heroHP").html(starWars.hero[0]);
 				$("#heroAP").html(starWars.hero[1]);
@@ -394,6 +395,7 @@ $(document).ready(function(){
 					starWars.darkWin = true;
 					starWars.endGameFunc();
 					$("#theButton").html("Continue");
+					$("#skill1, #skill2, #skill3").addClass("faded");
 				}
 				if (darkHP <= 0) {			
 					$("#msgBox").html("The Dark side is no match to the " + starWars.hero[2]);
@@ -408,7 +410,8 @@ $(document).ready(function(){
 					starWars.nextMatch = true;
 					starWars.heroWin = true;	
 					starWars.endGameFunc();				
-					$("#theButton").html("Continue");					
+					$("#theButton").html("Continue");
+					$("#skill1, #skill2, #skill3").addClass("faded");	
 				}
 				
 				starWars.skillsCounterFunc();
@@ -445,42 +448,45 @@ $(document).ready(function(){
 		thirdSkill: function() {
 			if (starWars.hero[2] === "Wookie" && starWars.hero[9] === true) {
 				starWars.bombardment = Math.floor(Math.random() * 50) + 1;
-				console.log(starWars.bombardment);
 				darkHP -= starWars.bombardment;				
 			}
 			else if (starWars.hero[2] === "Ewok" && starWars.hero[9] === true) {
-				starWars.rally = Math.floor(Math.random() * 20) + 1;
-				console.log(starWars.bombardment);
+				starWars.rally = Math.floor(Math.random() * 9) + 3;
 				darkHP -= starWars.rally;
 				heroHP += starWars.rally
 			}
 		},
 
 		skillsCounterFunc: function() {
-			if ((starWars.skillsCounter % 2) === 0) {
-				$("#skill1, #skill2, #skill3").removeClass("faded");
-			}
-			else if ((starWars.skillsCounter % 2) === 1) {
-				$("#skill1, #skill2, #skill3").addClass("faded");
-			}
+			if (starWars.heroWin === false && starWars.darkWin === false)
+				if ((starWars.skillsCounter % 2) === 0) {
+					$("#skill1, #skill2, #skill3").removeClass("faded");
+				}
+				else if ((starWars.skillsCounter % 2) === 1) {
+					$("#skill1, #skill2, #skill3").addClass("faded");
+				}
 		},
 
 		darkSpecialSkill: function() {
 			var randomNumber = Math.floor(Math.random() * starWars.level);
-			console.log(randomNumber);
 
 			if (starWars.hero[2] === "Ewok" && starWars.hero[5] === true && starWars.poisonCounter > 0  ) {									
 						starWars.darkSS = 0;
 						starWars.poisonCounter--;
+						//if (starWars.poisonCounter === 0) {
+						//	starWars.hero[5] === false;
+						//}
 						if (starWars.poisonCounter === 0) {
-							starWars.hero[5] === false;
-						}
-						if (starWars.poisonCounter === 1) {
 							darkHP -= heroAP;
 							$("#specialBox").append(starWars.hero[2] + " uses Poison to interrupt spells<br>");	
 						}
 						if (randomNumber < 3) {
-							$("#specialBox").append(starWars.dark[2] + " failed to cast skill due to poison");
+							if (starWars.dark[2] === "Kylo Ren") {
+								$("#specialBox").append(starWars.dark[2] + " failed to cast " + starWars.kylorenSkills[randomNumber] + " due to poison");
+							}
+							else if (starWars.dark[2] === "Darth Vader") {
+								$("#specialBox").append(starWars.dark[2] + " failed to cast " + starWars.vaderSkills[randomNumber] + " due to poison");
+							}
 						}
 			}
 
@@ -541,8 +547,7 @@ $(document).ready(function(){
 			darkCAP = starWars.dark[1];
 			$("#darkHP").html(darkHP);
 			$("#darkCAP").html(darkCAP);
-			$("#theButton").html("Continue");
-			$("#skill1, #skill2, #skill3").addClass("faded");
+			starWars.nextRoundBoth();
 		},
 
 		nextRoundDarkWin: function() {
@@ -550,22 +555,29 @@ $(document).ready(function(){
 			heroHP = starWars.hero[0];
 			heroAP = starWars.hero[1];
 			$("#heroHP").html(heroHP);
-			$("#heroAP").html(heroAP);
-			$("#theButton").html("Continue");
+			$("#heroAP").html(heroAP);	
+			starWars.nextRoundBoth();		
+		},
+
+		nextRoundBoth: function() {
+			$("#theButton").html("Attack");
 			$("#skill1, #skill2, #skill3").addClass("faded");
+			skillsCounter = 0;
 		},
 
 		wipeOut: function() {
 			$("#arenaHero, #arenaDark, #heroRTstats, #darkRTStats").addClass("invisible");
 			$(".statsTextHeroes, .statsTextDark").empty();
 			$("#specialBox").html("Defeat the Dark Side with your crossbows and spears!<br>");
-			$("#specialBox").append("Using <strong>attack button</strong> damages the enemy with your current attack power(AP) and increments the AP<br>");
-			$("#specialBox").append("The enemy may cast a strong spell along with his current counter attack power(CAP) at it's turn<br>");
-			$("#specialBox").append("You can use special skills every other turn but it will consume one turn");
+			$("#specialBox").append("Attack Power(AP) is used to damage a Sith. Counter Attack Power(CAP) is the Sith's equivalent<br>");
+			$("#specialBox").append("Using attack button damages the enemy and increments your AP<br>");
+			$("#specialBox").append("A Sith randomly casts a strong spell<br>");
+			$("#specialBox").append("You can use a special skill every other turn");
 			$("#heroHP, #darkHP, #heroAP, #darkCAP").html(00);
 			$("#theButton").html("Fight");
 			$("#theButton").removeClass("faded");
-			$("#msgBox").html("Click fight to start");			
+			$("#msgBox").html("Read guide below.<br>");
+			$("#msgBox").append("Select a Hero and a Sith then click Fight to start.");			
 
 			starWars.hero = "";
 			starWars.dark = "";
@@ -598,13 +610,11 @@ $(document).ready(function(){
 				$("#msgBox").html("You have destroyed the Dark Side!");
 				$("#darkHP").html("0");
 				starWars.goodGame();
-				return;				
 			}	
 			else if (starWars.wookie[3] === false && starWars.ewok[3] === false) {
 				$("#msgBox").html("You lost to the Dark Side");
 				$("#heroHP").html("0");
 				starWars.goodGame();
-				return;
 			}	
 		},
 	}
@@ -681,7 +691,7 @@ $(document).ready(function(){
 					$("#specialBox").empty();
 					starWars.darkWin = false;			
 				}
-				else if (starWars.ewok[3] === false) {
+				else if (starWars.ewok[3] === false) {	
 					starWars.hero = starWars.wookie;
 					starWars.nextRoundDarkWin();
 					$("#specialBox").empty();
@@ -694,7 +704,7 @@ $(document).ready(function(){
 	$("#skill1").click(function() {
 		if (starWars.endGame === false && starWars.fight === true && (starWars.skillsCounter % 2) === 0) {
 			if (starWars.hero[2] === "Ewok") {		
-				starWars.poisonCounter = 2;
+				starWars.poisonCounter = 1;
 			}
 			starWars.hero[5] = true;
 			starWars.attack();
