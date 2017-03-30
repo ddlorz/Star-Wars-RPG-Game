@@ -1,8 +1,107 @@
-body {
-	background-color: #000000;
+html, body {
 	height: 100%;
+}
+body {
+	background-image: url("https://cdn.shutterstock.com/shutterstock/videos/13024982/thumb/1.jpg");
+	font-size: 14pt;		
+	font-family: 'Oswald', sans-serif;
 	color: #ffffff;
-	font-family: 'Russo One', sans-serif; 
-	font-size: 14pt;
-	letter-spacing: 2px;
+}
+h1 {
+	font-family: 'Poller One', cursive;
+	font-size: 32pt;
+}
+h4 {
+	margin: 0;
+	font-size: 24pt;
+}
+.headerHeroes {
+	color: #ffffff;
+}
+.headerDark {
+	color: #ffffff;
+}
+.navBG {
+	background-image: url("https://cdn.shutterstock.com/shutterstock/videos/13024982/thumb/1.jpg");
+}
+.icons {
+	height: 130px;
+	width: 100px;
+	margin-bottom: 2px;
+}
+.iconsArena {
+	height: 130px;
+	width: 100px;
+	margin-bottom: 2px;
+}
+.icons:hover {
+	opacity: .5;
+	cursor: pointer;
+}
+.iconsHeroes {
+	border: 4px inset #ffcc00;
+}
+.iconsDark {
+	border: 4px inset #cc0000;
+}
+.textHeroes{
+	color: #ffcc00;
+	min-width: 100px;
+}
+.textDark {
+	color: #cc0000;
+}
+.textNeutral {
+	color: #009900;
+}
+.divIcon {
+	font-size: 9pt;
+	height: 180px;
+	width: 146px;
+	border: 4px inset #d9d9d9;
+	margin: 0 auto;
+	margin-top: 5px;
+}
+.VS {
+	font-family: 'Poller One', cursive;
+	font-size: 30pt;
+	margin-top: 100px;
+}
+.arena {
+	margin-top: 50px;
+	margin-bottom: 10px;
+}
+.faded {
+	opacity: .2;
+}
+.statsTextHeroes {
+	font-size: 10pt;
+	text-align: right;
+}
+.statsTextDark {
+	font-size: 10pt;
+	text-align: left;
+}
+.floatRight {
+	float: right;
+}
+.floatLeft {
+	float: left;
+}
+.textStats {
+	font-size: 10pt;
+	margin: 0 5px 0 5px;
+}
+.skillsButton {
+	margin: 0 3px 5px 3px;
+}
+#msgBox {
+	width: 100%;
+	height: 100px;
+	font-size: 10pt;
+}
+@media screen and (max-width: 1200px) {	 
+	.textHeroes, .textDark {
+		font-size: 10pt;
+	}
 }
