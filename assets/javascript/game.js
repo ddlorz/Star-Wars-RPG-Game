@@ -347,7 +347,7 @@ $(document).ready(function(){
 			starWars.heroWin = false;
 			starWars.darkWin = false;	
 			starWars.endGame = false;
-			starWars.skillsCounter = 0;
+			starWars.skillsCounter = 1;
 			starWars.poisonCounter = 0;
 
 			starWars.wookie = [100, 4, "Wookie", true, "Thick Skin", false, "Empower", false, "Bombardment", false];
@@ -355,10 +355,9 @@ $(document).ready(function(){
 			starWars.kyloren = [200, 6, "Kylo Ren", true];
 			starWars.vader = [250, 15, "Darth Vader", true];
 
-			$("#kyloren").removeClass("faded");
-			$("#darthvader").removeClass("faded");
-			$("#wookie").removeClass("faded");
-			$("#ewok").removeClass("faded");
+			$("#kyloren, #darthvader, #wookie, #ewok").removeClass("faded");
+
+			$("#skill1, #skill2, #skill3").addClass("faded");
 		},
 
 		goodGame: function() {
