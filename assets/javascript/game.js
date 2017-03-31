@@ -323,7 +323,7 @@ $(document).ready(function(){
 		nextRoundBoth: function() {
 			$("#theButton").html("Attack");
 			$("#skill1, #skill2, #skill3").addClass("faded");
-			skillsCounter = 0;
+			starWars.skillsCounter = 1;
 		},
 
 		wipeOut: function() {
