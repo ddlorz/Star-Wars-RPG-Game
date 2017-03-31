@@ -41,9 +41,9 @@ $(document).ready(function(){
 				$("#arenaHero").attr("src", "assets/images/ewok.jpg");				
 				$(".statsTextHeroes").html("Ewok:<br> 120 HP<br>Attack Power: 4<br> Power Increment: 4");
 				$(".statsTextHeroes").append("<br><br>Skills: <br>");
-				$(".statsTextHeroes").append("1: Poison: Prevent enemy skill for 1 turn<br>");
-				$(".statsTextHeroes").append("2: Sneak Attack: Deal 1.3 times AP <br>");
-				$(".statsTextHeroes").append("3: Rally Tribe: Deal and block 3-12 damage<br>");
+				$(".statsTextHeroes").append("1: Poison: Prevent enemy skill<br>");
+				$(".statsTextHeroes").append("2: Sneak: Deal 1.3 times AP <br>");
+				$(".statsTextHeroes").append("3: Rally: Deal and block 3-12 damage<br>");
 				starWars.heroDisplaymicro();
 				$("#ewok").addClass("faded");
 			}
@@ -141,7 +141,8 @@ $(document).ready(function(){
 				starWars.skillsCounter ++;				
 
 				if (heroHP <= 0) {
-					$("#msgBox").html(starWars.dark[2] + " has overwhelmed you");
+					//$("#msgBox").html(starWars.dark[2] + " has overwhelmed you");
+					$("#specialBox").append("<br><br>" + starWars.dark[2] + " has overwhelmed you")
 					heroHP = 0;
 					if (starWars.hero[2] === 'Wookie') {
 						starWars.wookie[3] = false;
@@ -157,7 +158,8 @@ $(document).ready(function(){
 					$("#skill1, #skill2, #skill3").addClass("faded");
 				}
 				if (darkHP <= 0) {			
-					$("#msgBox").html("The Dark side is no match to the " + starWars.hero[2]);
+					//$("#msgBox").html("The Dark side is no match to the " + starWars.hero[2]);
+					$("#specialBox").append("<br><br>" + "The Dark side is no match to the " + starWars.hero[2]);
 					darkHP = 0;
 					if (starWars.dark[2] === 'Kylo Ren') {
 						starWars.kyloren[3] = false;

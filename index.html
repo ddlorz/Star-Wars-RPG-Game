@@ -68,24 +68,29 @@
 
 	<div class="container arena">
 		<div class="row text-center">
-			<div class="col-md-5">											
+			<div class="col-md-4">														
 				<div class="divIcon textNeutral floatRight">
 					<br><img src="" alt="Hero" class="iconsArena iconsHeroes invisible" id="arenaHero"><br>					
 				</div>
-				<div class="statsTextHeroes textHeroes floatRight" style="margin-right: 15px;"></div>					
+				<div class="statsTextHeroes textHeroes floatRight" style="margin-right: 15px;"></div>						
 			</div>	
-			<div class="col-md-2">
-				<div id="fightButton">	
-					<div id="msgBox">Read guide below.<br>Select a Hero and a Sith then click Fight to start.</div>
-					<button class="btn btn-default skillsButton" id="theButton">Fight</button>
-					<button class="btn btn-default skillsButton faded" id="skill1">Skill 1</button><br>
-					<button class="btn btn-default skillsButton faded" id="skill2">Skill 2</button>
-					<button class="btn btn-default skillsButton faded" id="skill3">Skill 3</button>
-					<button class="btn btn-default" id="restartButton">Restart</button>
-					
+			<div class="col-md-4">		
+				<div class="row text-center">
+					<div class="col-md-6 col-md-offset-0 textHeroes invisible" id="heroRTstats">				
+						<div class="textStats">Hero HP:</div>
+						<div id="heroHP">00</div><br> 		 		
+				 		<div class="textStats">Attack Power:</div>
+				 		<div id="heroAP">00</div>
+				 	</div>
+					<div class="col-md-6 textDark invisible" id="darkRTStats">			
+					 	<div class="textStats">DarkSide HP:</div>
+					 	<div id="darkHP" >00</div><br>
+					 	<div class="textStats">Counter Attack Power:</div>
+					 	<div id="darkCAP">00</div>
+					</div>
 				</div>
-			</div>
-			<div class="col-md-5">
+			</div>	
+			<div class="col-md-4">
 				<div class="divIcon textNeutral floatLeft">
 					<br><img src="" alt="Dark Side" class="iconsArena iconsDark invisible" id="arenaDark"><br>									
 				</div>
@@ -95,22 +100,22 @@
 	</div>
 
 	<div class="container">
-		<div class="row text-center">
-		<div class="col-md-2 col-md-offset-3 textHeroes invisible" id="heroRTstats">				
-			<div class="floatLeft textStats">Hero HP:</div>
-			<div class="floatLeft" id="heroHP">00</div>	<br>		 		 		
-	 		<div class="floatLeft textStats">Attack Power:</div>
-	 		<div class="floatLeft" id="heroAP">00</div>
-	 	</div>
-		<div class="col-md-2 headerDark"></div>
-		<div class="col-md-5 textDark invisible" id="darkRTStats">			
-		 	<div class="floatLeft textStats">DarkSide HP:</div>
-		 	<div class="floatLeft" id="darkHP" >00</div><br>
-		 	<div class="floatLeft textStats">Counter Attack Power:</div>
-		 	<div class="floatLeft" id="darkCAP">00</div>
-		</div>
+	
 	</div>
 
+	<div class="container">
+		<div class="row text-center">
+			<div id="fightButton">	
+					<!--<div id="msgBox">Read guide below.<br>Select a Hero and a Sith then click Fight to start.</div>-->
+					<button class="btn btn-default skillsButton" id="theButton">Fight</button>
+					<button class="btn btn-default skillsButton faded" id="skill1">Skill 1</button>
+					<button class="btn btn-default skillsButton faded" id="skill2">Skill 2</button>
+					<button class="btn btn-default skillsButton faded" id="skill3">Skill 3</button>
+					<button class="btn btn-default" id="restartButton">Restart</button>					
+			</div>
+		</div>
+	</div>
+	
 	<div class="container" style="margin-top: 20px; min-height: 200px;">
 		<div class="row text-center">
 			<div class="col-md-12 col-md-offset-0" id="specialBox">
@@ -122,7 +127,7 @@
 		</div>
 	</div>
 
-	<div style="height: 170px"></div>
+	<div style="height: 100px"></div>
 	<footer class="footer navbar topMarginOnly">
   		<h5 class="navbar-text text-center" style="width: 100%;">©Copyright 2017 Domingo Loria</h5>  
 	</footer>
