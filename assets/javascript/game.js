@@ -72,7 +72,7 @@ $(document).ready(function(){
 				$(".statsTextDark").html("Vader:<br> 250 HP <br> Counter Attack Power: 15");
 				$(".statsTextDark").append("<br><br>Skills: <br>");
 				$(".statsTextDark").append("Force Lightning: Current CAP * 2<br>");
-				$(".statsTextDark").append("Force Destruction: Current Hero HP / 2<br>"); 
+				$(".statsTextDark").append("Force Destruction: Hero HP / 2<br>"); 
 				$(".statsTextDark").append("Force Rage: Increment CAP by 5");
 				starWars.darkDisplaymicro();
 				$("#darthvader").addClass("faded");
